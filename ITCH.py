@@ -15,6 +15,9 @@ party_name_options = df['Party Name'].unique()
 bill_date = st.selectbox('Select Bill Date:', bill_date_options)
 party_name = st.selectbox('Select Party Name:', party_name_options)
 
+# Define the columns to display
+selected_columns = ['Product Name (Overwrite)', 'category', 'HSN Code', 'Packing', 'Qty', 'Purchase Rate', 'Purchase Amt', 'CGST Amount', 'SGST Amount', 'IGST Amount', 'Total Amount']
+
 # Function to display products based on selected Bill Date and Party Name
 def display_products(bill_date, party_name):
     selected_data = df[(df['Bill Date'] == bill_date) & (df['Party Name'] == party_name)]
