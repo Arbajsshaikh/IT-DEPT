@@ -16,7 +16,7 @@ bill_date = st.selectbox('Select Bill Date:', bill_date_options)
 party_name = st.selectbox('Select Party Name:', party_name_options)
 
 # Define the columns to display
-selected_columns = ['Product Name (Overwrite)', 'category', 'HSN Code', 'Packing', 'Qty', 'Purchase Rate', 'Purchase Amt', 'CGST Amount', 'SGST Amount', 'IGST Amount', 'Total Amount']
+selected_columns = ['Product Name (Overwrite)', 'Category', 'HSN Code', 'Packing', 'Qty', 'Purchase Rate', 'Purchase Amt', 'CGST Amount', 'SGST Amount', 'IGST Amount', 'Total Amount']
 
 # Function to display products based on selected Bill Date and Party Name
 def display_products(bill_date, party_name):
