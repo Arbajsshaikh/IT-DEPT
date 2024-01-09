@@ -5,7 +5,7 @@ import streamlit as st
 # Replace 'your_data.csv' with the actual file or data source you have
 
 # Example:
-# df = pd.read_csv("CATEGORY_ADDED-Purchase Register 2020-21.csv")
+df = pd.read_csv("CATEGORY_ADDED-Purchase Register 2020-21.csv")
 
 # Create dropdowns for Bill Date and Party Name
 bill_date_options = df['Bill Date'].unique()
