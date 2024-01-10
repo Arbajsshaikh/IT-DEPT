@@ -65,7 +65,7 @@ if not filtered_data.empty:
         custom_data = custom_data.append(pd.Series(column_names, index=custom_data.columns), ignore_index=True)
     
         # Add data values in the 8th row
-        custom_data = custom_data.append(filtered_data.values.flatten(), ignore_index=True)
+        custom_data = custom_data.append(pd.Series(filtered_data.values.flatten(), index=custom_data.columns), ignore_index=True)
     
         # Save to CSV with custom formatting
         csv_data = custom_data.to_csv(index=False, header=False)
