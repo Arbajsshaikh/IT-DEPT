@@ -45,22 +45,22 @@ if not filtered_data.empty:
 
     # Function to download custom filtered data as CSV
     def download_custom_filtered_data_csv(data, filename):
-    custom_header = pd.DataFrame({
-        'Custom Headers': [
-            'PARTY NAME=' + data['Party Name'].iloc[0],
-            'PARTY INVOICE NO=' + data['Bill No'].iloc[0],
-            'PARTY INVOICE DATE=' + data['Doc. Date'].iloc[0],
-            'GEN PUR NO=' + data['Vou No'].iloc[0],
-            'GEN PUR DATE=' + data['Bill Date'].iloc[0],
-        ]
-    })
-
-    custom_data = pd.concat([custom_header, data.drop(['Party Name', 'Bill No', 'Doc. Date', 'Vou No', 'Bill Date'], axis=1)])
-
-    csv_data = custom_data.to_csv(index=False)
-    b64 = base64.b64encode(csv_data.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
-    st.markdown(href, unsafe_allow_html=True)
+        custom_header = pd.DataFrame({
+            'Custom Headers': [
+                'PARTY NAME=' + data['Party Name'].iloc[0],
+                'PARTY INVOICE NO=' + data['Bill No'].iloc[0],
+                'PARTY INVOICE DATE=' + data['Doc. Date'].iloc[0],
+                'GEN PUR NO=' + data['Vou No'].iloc[0],
+                'GEN PUR DATE=' + data['Bill Date'].iloc[0],
+            ]
+        })
+    
+        custom_data = pd.concat([custom_header, data.drop(['Party Name', 'Bill No', 'Doc. Date', 'Vou No', 'Bill Date'], axis=1)])
+    
+        csv_data = custom_data.to_csv(index=False)
+        b64 = base64.b64encode(csv_data.encode()).decode()
+        href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
+        st.markdown(href, unsafe_allow_html=True)
 
 # Trigger download automatically when a Vou No is selected
 if selected_vou_no:
