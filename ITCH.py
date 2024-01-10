@@ -28,6 +28,9 @@ if not filtered_data.empty:
         # Reset the index to ensure both column headers and values start from the first column
         filtered_data = filtered_data.reset_index(drop=True)
     
+        # Replace NaN values with empty strings
+        filtered_data = filtered_data.replace({pd.NA: ''})
+    
         # Create a dictionary for custom headers and their corresponding values
         custom_headers = {
             'PARTY NAME': filtered_data['Party Name'].iloc[0],
@@ -60,6 +63,7 @@ if not filtered_data.empty:
         b64 = base64.b64encode(csv_data.encode()).decode()
         href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
         st.markdown(href, unsafe_allow_html=True)
+
 
 
 
