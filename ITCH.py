@@ -48,6 +48,9 @@ if not filtered_data.empty:
         values_data = filtered_data[column_names].apply(lambda x: [str(val) for val in x])
         data_df = pd.DataFrame(values_data, columns=column_names)
     
+        # Remove leading/trailing spaces from the filename
+        filename = filename.strip()
+    
         # Save to CSV with custom formatting
         with open(f"{filename}.csv", 'w', newline='') as f:
             writer = csv.writer(f)
@@ -67,7 +70,6 @@ if not filtered_data.empty:
                 writer.writerow(data_df.iloc[i])
     
         st.markdown(f'<a href="{filename}.csv" download="{filename}.csv">Download Filtered Data as CSV</a>', unsafe_allow_html=True)
-
 
 
 
