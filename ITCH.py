@@ -45,6 +45,6 @@ def download_filtered_data_csv(data, filename):
     href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
     st.markdown(href, unsafe_allow_html=True)
 
-# Download button
-if st.button('Download Filtered Data as CSV'):
+# Trigger download automatically when a Vou No is selected
+if selected_vou_no:
     download_filtered_data_csv(filtered_data, selected_vou_no)
