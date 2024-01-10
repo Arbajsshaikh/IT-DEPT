@@ -40,12 +40,16 @@ if not filtered_data.empty:
         # Add an empty row
         custom_data = pd.concat([custom_data, pd.DataFrame(['', '']).T], ignore_index=True)
     
-        # Add column names and values
-        for col in filtered_data.columns:
-            col_values = filtered_data[col].tolist()
-            col_values = [''] + col_values  # Empty cell for the header
-            col_data = pd.DataFrame({f'{col}': col_values})
-            custom_data = pd.concat([custom_data, col_data], axis=1)
+        # Create a DataFrame for column names
+        column_names = filtered_data.columns.tolist()
+        column_names_data = pd.DataFrame({'Column Names': column_names})
+    
+        # Add column names in the 7th row
+        custom_data = pd.concat([custom_data, column_names_data.T], ignore_index=True)
+    
+        # Add values from the 8th row
+        values_data = filtered_data[column_names].apply(lambda x: [''] + x.astype(str).tolist())
+        custom_data = pd.concat([custom_data, values_data], ignore_index=True)
     
         # Save to CSV with custom formatting
         csv_data = custom_data.to_csv(index=False, header=False)
@@ -53,6 +57,7 @@ if not filtered_data.empty:
         b64 = base64.b64encode(csv_data.encode()).decode()
         href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
         st.markdown(href, unsafe_allow_html=True)
+
 
 
 
