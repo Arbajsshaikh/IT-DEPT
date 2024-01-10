@@ -45,7 +45,7 @@ if not filtered_data.empty:
         custom_data = pd.concat([custom_data, pd.DataFrame([column_names])], ignore_index=True)
     
         # Add data values in the 8th row
-        custom_data = pd.concat([custom_data, pd.DataFrame([filtered_data.values.flatten()])], ignore_index=True)
+        custom_data = pd.concat([custom_data, pd.DataFrame(filtered_data.values, columns=column_names)], ignore_index=True)
     
         # Save to CSV with custom formatting
         csv_data = custom_data.to_csv(index=False, header=False)
@@ -53,6 +53,7 @@ if not filtered_data.empty:
         b64 = base64.b64encode(csv_data.encode()).decode()
         href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
         st.markdown(href, unsafe_allow_html=True)
+
 
 
 # Trigger download automatically when a Vou No is selected
