@@ -32,20 +32,35 @@ selected_vou_no = st.selectbox('Select Vou No:', vou_no_options)
 # Filter data based on selected Vou No
 filtered_data = df[df['Vou No'] == selected_vou_no]
 
-# Rearrange and rename columns
-filtered_data_reordered = filtered_data[['Party Name', 'Bill No', 'Vou No', 'Bill Date', 'Doc. Date'] + [col for col in filtered_data.columns if col not in ['Party Name', 'Bill No', 'Vou No', 'Bill Date', 'Doc. Date']]]
+# Display custom header names and corresponding values
+if not filtered_data.empty:
+    st.text('PARTY NAME= ' + filtered_data['Party Name'].iloc[0])
+    st.text('PARTY INVOICE NO= ' + filtered_data['Bill No'].iloc[0])
+    st.text('PARTY INVOICE DATE= ' + filtered_data['Doc. Date'].iloc[0])
+    st.text('GEN PUR NO= ' + filtered_data['Vou No'].iloc[0])
+    st.text('GEN PUR DATE= ' + filtered_data['Bill Date'].iloc[0])
 
-# Display the filtered data with the specified column order and names
-st.table(filtered_data_reordered)
+    # Display the remaining columns
+    st.table(filtered_data.drop(['Party Name', 'Bill No', 'Doc. Date', 'Vou No', 'Bill Date'], axis=1))
 
-# Function to download filtered data as CSV with specified column order and names
-def download_filtered_data_csv(data, filename):
-    csv_data = data.to_csv(index=False)
-    b64 = base64.b64encode(csv_data.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
-    st.markdown(href, unsafe_allow_html=True)
+    # Function to download custom filtered data as CSV
+    def download_custom_filtered_data_csv(data, filename):
+        custom_header = [
+            'PARTY NAME=' + data['Party Name'].iloc[0],
+            'PARTY INVOICE NO=' + data['Bill No'].iloc[0],
+            'PARTY INVOICE DATE=' + data['Doc. Date'].iloc[0],
+            'GEN PUR NO=' + data['Vou No'].iloc[0],
+            'GEN PUR DATE=' + data['Bill Date'].iloc[0],
+        ]
 
-# Trigger download automatically when a Vou No is selected
-if selected_vou_no:
-    download_filtered_data_csv(filtered_data_reordered, selected_vou_no)
+        custom_data = pd.DataFrame(custom_header, columns=['Custom Headers'])
+        custom_data = custom_data.append(data.drop(['Party Name', 'Bill No', 'Doc. Date', 'Vou No', 'Bill Date'], axis=1))
 
+        csv_data = custom_data.to_csv(index=False)
+        b64 = base64.b64encode(csv_data.encode()).decode()
+        href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
+        st.markdown(href, unsafe_allow_html=True)
+
+    # Trigger download automatically when a Vou No is selected
+    if selected_vou_no:
+        download_custom_filtered_data_csv(filtered_data, selected_vou_no)
