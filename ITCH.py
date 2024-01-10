@@ -40,14 +40,12 @@ if not filtered_data.empty:
         # Add an empty row
         custom_data = pd.concat([custom_data, pd.DataFrame(['', '']).T], ignore_index=True)
     
-        # Get the list of columns excluding the ones used in the header
-        remaining_columns = [col for col in filtered_data.columns if col not in custom_headers]
+        # Add column names in the 7th row
+        column_names = filtered_data.columns.tolist()
+        custom_data = pd.concat([custom_data, pd.DataFrame([column_names])], ignore_index=True)
     
-        # Add remaining columns in the 7th row
-        custom_data = pd.concat([custom_data, pd.DataFrame([remaining_columns])], ignore_index=True)
-    
-        # Add data values in the 8th row, excluding the columns used in the header
-        custom_data = pd.concat([custom_data, filtered_data[remaining_columns]], ignore_index=True)
+        # Add data values in the 8th row
+        custom_data = pd.concat([custom_data, pd.DataFrame([filtered_data.values.flatten()])], ignore_index=True)
     
         # Save to CSV with custom formatting
         csv_data = custom_data.to_csv(index=False, header=False)
@@ -57,8 +55,6 @@ if not filtered_data.empty:
         st.markdown(href, unsafe_allow_html=True)
 
 
-
 # Trigger download automatically when a Vou No is selected
 if selected_vou_no:
     download_custom_filtered_data_csv(filtered_data, selected_vou_no)
-
