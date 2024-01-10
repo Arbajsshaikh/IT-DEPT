@@ -25,6 +25,9 @@ if not filtered_data.empty:
 
     # Function to download custom filtered data as CSV
     def download_custom_filtered_data_csv(filtered_data, filename):
+        # Reset the index to ensure both column headers and values start from the first column
+        filtered_data = filtered_data.reset_index(drop=True)
+    
         # Create a dictionary for custom headers and their corresponding values
         custom_headers = {
             'PARTY NAME': filtered_data['Party Name'].iloc[0],
@@ -57,6 +60,7 @@ if not filtered_data.empty:
         b64 = base64.b64encode(csv_data.encode()).decode()
         href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
         st.markdown(href, unsafe_allow_html=True)
+
 
 
 
