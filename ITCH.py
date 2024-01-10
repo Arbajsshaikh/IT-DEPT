@@ -53,18 +53,19 @@ if not filtered_data.empty:
             'GEN PUR DATE': filtered_data['Bill Date'].iloc[0],
         }
     
+        # Create a DataFrame for headers
         custom_data = pd.DataFrame(list(headers.items()), columns=['Custom Headers', 'Values'])
-        custom_data = custom_data.append(filtered_data.drop(['Party Name', 'Bill No', 'Doc. Date', 'Vou No', 'Bill Date'], axis=1))
+    
+        # Concatenate the header DataFrame and filtered_data along with eight empty rows
+        custom_data = pd.concat([pd.DataFrame([''] * len(custom_data.columns)).T, custom_data, filtered_data], ignore_index=True)
     
         # Save to CSV with custom formatting
         csv_data = custom_data.to_csv(index=False, header=False)
     
-        # Add eight empty lines before the data
-        csv_data = '\n' * 8 + csv_data
-    
         b64 = base64.b64encode(csv_data.encode()).decode()
         href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
         st.markdown(href, unsafe_allow_html=True)
+
 
 
 # Trigger download automatically when a Vou No is selected
