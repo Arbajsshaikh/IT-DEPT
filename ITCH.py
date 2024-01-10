@@ -26,9 +26,15 @@ def display_products(bill_date, party_name):
     st.table(products_data)
     return selected_data
 
+# Function to download filtered data
+def download_filtered_data(data, filename):
+    csv_data = data.to_csv(index=False)
+    b64 = base64.b64encode(csv_data.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data</a>'
+    st.markdown(href, unsafe_allow_html=True)
+
 # Display the products when a button is clicked
 if st.button('Show Products'):
     selected_data = display_products(bill_date, party_name)
     # Download button
     download_filtered_data(selected_data, f'{party_name}_{bill_date}')
-
