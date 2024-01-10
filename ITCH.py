@@ -24,7 +24,7 @@ if not filtered_data.empty:
     st.table(filtered_data.drop(['Party Name', 'Bill No', 'Doc. Date', 'Vou No', 'Bill Date'], axis=1))
 
     # Function to download custom filtered data as CSV
-    def download_custom_filtered_data_csv(filtered_data, filename):
+   def download_custom_filtered_data_csv(filtered_data, filename):
         # Reset the index to ensure both column headers and values start from the first column
         filtered_data = filtered_data.reset_index(drop=True)
     
@@ -46,19 +46,19 @@ if not filtered_data.empty:
         # Add an empty row
         custom_data = pd.concat([custom_data, pd.DataFrame(['', '']).T], ignore_index=True)
     
-        # Create a DataFrame for column names starting from the first column
+        # Create a DataFrame for column names and values
         column_names = filtered_data.columns.tolist()
-        column_names_data = pd.DataFrame({'Column Names': column_names})
-    
-        # Add column names in the 7th row
-        custom_data = pd.concat([custom_data, column_names_data.T], ignore_index=True)
-    
-        # Add values from the 8th row, starting from the first column
         values_data = filtered_data[column_names].apply(lambda x: [str(val) for val in x])
-        custom_data = pd.concat([custom_data, values_data], ignore_index=True)
+        data_df = pd.DataFrame(values_data, columns=column_names)
+    
+        # Concatenate custom headers, an empty row, column names, and values
+        custom_data = pd.concat([custom_data, data_df], ignore_index=True)
     
         # Save to CSV with custom formatting
-        csv_data = custom_data.to_csv(index=False, header=False)
+        csv_data = custom_data.to_csv(index=False, sep='\t')  # Use tab as the separator
+    
+        # Replace tabs in the first column with spaces for better alignment
+        csv_data = csv_data.replace('\t', ' ', regex=True)
     
         b64 = base64.b64encode(csv_data.encode()).decode()
         href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
