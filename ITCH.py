@@ -41,28 +41,32 @@ if not filtered_data.empty:
         }
     
         # Create a DataFrame for custom headers
-        custom_data = pd.DataFrame(list(custom_headers.items()), columns=['Custom Headers', 'Values'])
+        custom_headers_df = pd.DataFrame(list(custom_headers.items()), columns=['Custom Headers', 'Values'])
     
-        # Add an empty row
-        custom_data = pd.concat([custom_data, pd.DataFrame(['', '']).T], ignore_index=True)
-    
-        # Create a DataFrame for column names starting from the first column
+        # Create a DataFrame for column names and values
         column_names = filtered_data.columns.tolist()
-        column_names_data = pd.DataFrame({'Column Names': column_names})
-    
-        # Add column names in the 7th row
-        custom_data = pd.concat([custom_data, column_names_data.T], ignore_index=True)
-    
-        # Add values from the 8th row, starting from the first column
         values_data = filtered_data[column_names].apply(lambda x: [str(val) for val in x])
-        custom_data = pd.concat([custom_data, values_data], ignore_index=True)
+        data_df = pd.DataFrame(values_data, columns=column_names)
     
         # Save to CSV with custom formatting
-        csv_data = custom_data.to_csv(index=False, header=False)
+        with open(f"{filename}.csv", 'w', newline='') as f:
+            writer = csv.writer(f)
+            
+            # Write custom headers
+            for i in range(len(custom_headers_df)):
+                writer.writerow([custom_headers_df.iloc[i]['Custom Headers'], custom_headers_df.iloc[i]['Values']])
+            
+            # Add an empty row
+            writer.writerow(['', ''])
+            
+            # Write column names
+            writer.writerow(column_names)
+            
+            # Write values
+            for i in range(len(data_df)):
+                writer.writerow(data_df.iloc[i])
     
-        b64 = base64.b64encode(csv_data.encode()).decode()
-        href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
-        st.markdown(href, unsafe_allow_html=True)
+        st.markdown(f'<a href="{filename}.csv" download="{filename}.csv">Download Filtered Data as CSV</a>', unsafe_allow_html=True)
 
 
 
