@@ -45,7 +45,8 @@ if not filtered_data.empty:
 
     # Function to download custom filtered data as CSV
     def download_custom_filtered_data_csv(filtered_data, filename):
-        headers = {
+        # Create a dictionary for custom headers and their corresponding values
+        custom_headers = {
             'PARTY NAME': filtered_data['Party Name'].iloc[0],
             'PARTY INVOICE NO': filtered_data['Bill No'].iloc[0],
             'PARTY INVOICE DATE': filtered_data['Doc. Date'].iloc[0],
@@ -53,28 +54,25 @@ if not filtered_data.empty:
             'GEN PUR DATE': filtered_data['Bill Date'].iloc[0],
         }
     
-        # Create a DataFrame for headers
-        custom_data = pd.DataFrame(list(headers.items()), columns=['Custom Headers', 'Values'])
+        # Create a DataFrame for custom headers
+        custom_data = pd.DataFrame(list(custom_headers.items()), columns=['Custom Headers', 'Values'])
     
-        # Add eight empty rows
-        empty_rows = pd.DataFrame([''] * len(custom_data.columns)).T
-        for _ in range(8):
-            custom_data = pd.concat([empty_rows, custom_data], ignore_index=True)
+        # Add an empty row
+        custom_data = custom_data.append(pd.Series(['', ''], index=custom_data.columns), ignore_index=True)
     
-        # Concatenate the header DataFrame and filtered_data
-        custom_data = pd.concat([custom_data, filtered_data], ignore_index=True)
+        # Add column names in the 7th row
+        column_names = filtered_data.columns.tolist()
+        custom_data = custom_data.append(pd.Series(column_names, index=custom_data.columns), ignore_index=True)
+    
+        # Add data values in the 8th row
+        custom_data = custom_data.append(filtered_data.values.flatten(), ignore_index=True)
     
         # Save to CSV with custom formatting
         csv_data = custom_data.to_csv(index=False, header=False)
     
-        # Add column names just above the data
-        column_names = '\n'.join(filtered_data.columns)
-        csv_data = column_names + '\n' + csv_data
-    
         b64 = base64.b64encode(csv_data.encode()).decode()
         href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
         st.markdown(href, unsafe_allow_html=True)
-
 
 
 
