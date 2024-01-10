@@ -54,11 +54,13 @@ def download_custom_filtered_data_csv(filtered_data, filename):
     # Concatenate custom headers, an empty row, column names, and values
     custom_data = pd.concat([custom_data, data_df], ignore_index=True)
 
+    # Display the custom data in Streamlit
+    st.text(''.join(f"{key}= {value}\n" for key, value in custom_headers.items()))
+    st.text('')  # Empty row
+    st.table(custom_data.drop(['Custom Headers'], axis=1))
+
     # Save to CSV with custom formatting
     csv_data = custom_data.to_csv(index=False, sep='\t')  # Use tab as the separator
-
-    # Replace tabs in the first column with spaces for better alignment
-    csv_data = csv_data.replace('\t', ' ', regex=True)
 
     b64 = base64.b64encode(csv_data.encode()).decode()
     href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
