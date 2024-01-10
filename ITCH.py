@@ -40,12 +40,12 @@ if not filtered_data.empty:
         # Add an empty row
         custom_data = pd.concat([custom_data, pd.DataFrame(['', '']).T], ignore_index=True)
     
-        # Add column names in the 7th row
-        column_names = filtered_data.columns.tolist()
-        custom_data = pd.concat([custom_data, pd.DataFrame([column_names])], ignore_index=True)
-    
-        # Add data values in the 8th row
-        custom_data = pd.concat([custom_data, pd.DataFrame(filtered_data.values, columns=column_names)], ignore_index=True)
+        # Add column names and values
+        for col in filtered_data.columns:
+            col_values = filtered_data[col].tolist()
+            col_values = [''] + col_values  # Empty cell for the header
+            col_data = pd.DataFrame({f'{col}': col_values})
+            custom_data = pd.concat([custom_data, col_data], axis=1)
     
         # Save to CSV with custom formatting
         csv_data = custom_data.to_csv(index=False, header=False)
