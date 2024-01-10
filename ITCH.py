@@ -6,35 +6,45 @@ import base64
 # Replace 'your_data.csv' with the actual file or data source you have
 
 # Example:
-df = pd.read_csv("CATEGORY_ADDED-Purchase Register 2020-21.csv")
+df = pd.DataFrame({
+    'Bill No': ['WMPL/MFG/0553', 'WMPL/MFG/0555'],
+    'Doc. Date': ['22-10-2020', '22-10-2020'],
+    'Vou No': ['PW/10', 'PW/04'],
+    'Bill Date': ['24-10-2020', '24-10-2020'],
+    'Party Name': ['WALMARK MEDITECH PVT.LTD.', 'WALMARK MEDITECH PVT.LTD.'],
+    'State': ['Maharashtra', 'Maharashtra'],
+    'City Name': ['NAGPUR', 'NAGPUR'],
+    'Product Name (Overwrite)': ['SUPREME ADULT DIAPER(XL) 10', 'SUPREME ADULT DIAPER(XL) 10'],
+    'category': [None, None],
+    'HSN Code': [9619, 9619],
+    'Packing': [10, 10],
+    'Qty': [10, 10],
+    'Purchase Rate': [480.0, 240.0],
+    'Purchase Amt': [96000.0, 48000.0],
+    'CGST Amount': [5760.0, 2880.0],
+    'SGST Amount': [5760.0, 2880.0],
+    'IGST Amount': [None, None],
+    'Total Amount': [107520.0, 53760.0],
+    'Category': ['SURGICAL', 'SURGICAL']
+})
 
-# Create dropdowns for Bill Date and Party Name
-bill_date_options = df['Bill Date'].unique()
-party_name_options = df['Party Name'].unique()
+# Create dropdown for Vou No
+vou_no_options = df['Vou No'].unique()
+selected_vou_no = st.selectbox('Select Vou No:', vou_no_options)
 
-# Add a selectbox for Bill Date and Party Name
-bill_date = st.selectbox('Select Bill Date:', bill_date_options)
-party_name = st.selectbox('Select Party Name:', party_name_options)
+# Filter data based on selected Vou No
+filtered_data = df[df['Vou No'] == selected_vou_no]
 
-# Define the columns to display
-selected_columns = ['Product Name (Overwrite)', 'Category', 'HSN Code', 'Packing', 'Qty', 'Purchase Rate', 'Purchase Amt', 'CGST Amount', 'SGST Amount', 'IGST Amount', 'Total Amount']
+# Display the filtered data
+st.table(filtered_data)
 
-# Function to display products based on selected Bill Date and Party Name
-def display_products(bill_date, party_name):
-    selected_data = df[(df['Bill Date'] == bill_date) & (df['Party Name'] == party_name)]
-    products_data = selected_data[selected_columns]
-    st.table(products_data)
-    return selected_data
-
-# Function to download filtered data
-def download_filtered_data(data, filename):
+# Function to download filtered data as CSV
+def download_filtered_data_csv(data, filename):
     csv_data = data.to_csv(index=False)
     b64 = base64.b64encode(csv_data.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data</a>'
+    href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
     st.markdown(href, unsafe_allow_html=True)
 
-# Display the products when a button is clicked
-if st.button('Show Products'):
-    selected_data = display_products(bill_date, party_name)
-    # Download button
-    download_filtered_data(selected_data, f'{party_name}_{bill_date}')
+# Download button
+if st.button('Download Filtered Data as CSV'):
+    download_filtered_data_csv(filtered_data, selected_vou_no)
