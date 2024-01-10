@@ -29,7 +29,7 @@ if not filtered_data.empty:
         filtered_data = filtered_data.reset_index(drop=True)
     
         # Replace NaN values with empty strings
-        filtered_data = filtered_data.replace({pd.NA: ''})
+        filtered_data = filtered_data.fillna('')
     
         # Create a dictionary for custom headers and their corresponding values
         custom_headers = {
@@ -54,7 +54,7 @@ if not filtered_data.empty:
         custom_data = pd.concat([custom_data, column_names_data.T], ignore_index=True)
     
         # Add values from the 8th row, starting from the first column
-        values_data = filtered_data[column_names].apply(lambda x: [''] + x.astype(str).tolist())
+        values_data = filtered_data[column_names].apply(lambda x: [str(val) for val in x])
         custom_data = pd.concat([custom_data, values_data], ignore_index=True)
     
         # Save to CSV with custom formatting
@@ -63,6 +63,7 @@ if not filtered_data.empty:
         b64 = base64.b64encode(csv_data.encode()).decode()
         href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
         st.markdown(href, unsafe_allow_html=True)
+
 
 
 
