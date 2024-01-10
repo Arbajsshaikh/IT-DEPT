@@ -58,14 +58,14 @@ if not filtered_data.empty:
         custom_data = pd.DataFrame(list(custom_headers.items()), columns=['Custom Headers', 'Values'])
     
         # Add an empty row
-        custom_data = custom_data.append(pd.Series(['', ''], index=custom_data.columns), ignore_index=True)
+        custom_data = pd.concat([custom_data, pd.DataFrame(['', '']).T], ignore_index=True)
     
         # Add column names in the 7th row
         column_names = filtered_data.columns.tolist()
-        custom_data = custom_data.append(pd.Series(column_names, index=custom_data.columns), ignore_index=True)
+        custom_data = pd.concat([custom_data, pd.DataFrame([column_names])], ignore_index=True)
     
         # Add data values in the 8th row
-        custom_data = custom_data.append(pd.Series(filtered_data.values.flatten(), index=custom_data.columns), ignore_index=True)
+        custom_data = pd.concat([custom_data, pd.DataFrame([filtered_data.values.flatten()])], ignore_index=True)
     
         # Save to CSV with custom formatting
         csv_data = custom_data.to_csv(index=False, header=False)
@@ -73,7 +73,6 @@ if not filtered_data.empty:
         b64 = base64.b64encode(csv_data.encode()).decode()
         href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
         st.markdown(href, unsafe_allow_html=True)
-
 
 
 # Trigger download automatically when a Vou No is selected
