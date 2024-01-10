@@ -6,27 +6,7 @@ import base64
 # Replace 'your_data.csv' with the actual file or data source you have
 
 # Example:
-df = pd.DataFrame({
-    'Bill No': ['WMPL/MFG/0553', 'WMPL/MFG/0555'],
-    'Doc. Date': ['22-10-2020', '22-10-2020'],
-    'Vou No': ['PW/10', 'PW/04'],
-    'Bill Date': ['24-10-2020', '24-10-2020'],
-    'Party Name': ['WALMARK MEDITECH PVT.LTD.', 'WALMARK MEDITECH PVT.LTD.'],
-    'State': ['Maharashtra', 'Maharashtra'],
-    'City Name': ['NAGPUR', 'NAGPUR'],
-    'Product Name (Overwrite)': ['SUPREME ADULT DIAPER(XL) 10', 'SUPREME ADULT DIAPER(XL) 10'],
-    'category': [None, None],
-    'HSN Code': [9619, 9619],
-    'Packing': [10, 10],
-    'Qty': [10, 10],
-    'Purchase Rate': [480.0, 240.0],
-    'Purchase Amt': [96000.0, 48000.0],
-    'CGST Amount': [5760.0, 2880.0],
-    'SGST Amount': [5760.0, 2880.0],
-    'IGST Amount': [None, None],
-    'Total Amount': [107520.0, 53760.0],
-    'Category': ['SURGICAL', 'SURGICAL']
-})
+df = pd.read_csv('CATEGORY_ADDED-Purchase Register 2020-21.csv')
 
 # Create dropdown for Vou No
 vou_no_options = df['Vou No'].unique()
