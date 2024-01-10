@@ -24,16 +24,11 @@ def display_products(bill_date, party_name):
     selected_data = df[(df['Bill Date'] == bill_date) & (df['Party Name'] == party_name)]
     products_data = selected_data[selected_columns]
     st.table(products_data)
-
-# Function to download filtered data
-def download_filtered_data(data, filename):
-    csv_data = data.to_csv(index=False)
-    b64 = base64.b64encode(csv_data.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data</a>'
-    st.markdown(href, unsafe_allow_html=True)
+    return selected_data
 
 # Display the products when a button is clicked
 if st.button('Show Products'):
-    display_products(bill_date, party_name)
+    selected_data = display_products(bill_date, party_name)
     # Download button
     download_filtered_data(selected_data, f'{party_name}_{bill_date}')
+
