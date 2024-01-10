@@ -14,11 +14,11 @@ filtered_data = df[df['Vou No'] == selected_vou_no]
 
 # Display custom header names and corresponding values
 if not filtered_data.empty:
-    st.text('PARTY NAME= ' + filtered_data['Party Name :'].iloc[0])
-    st.text('PARTY INVOICE NO= ' + filtered_data['Bill No :'].iloc[0])
-    st.text('PARTY INVOICE DATE= ' + filtered_data['Doc. Date :'].iloc[0])
-    st.text('GEN PUR NO= ' + filtered_data['Vou No :'].iloc[0])
-    st.text('GEN PUR DATE= ' + filtered_data['Bill Date :'].iloc[0])
+    st.text('PARTY NAME : ' + filtered_data['Party Name'].iloc[0])
+    st.text('PARTY INVOICE NO : ' + filtered_data['Bill No'].iloc[0])
+    st.text('PARTY INVOICE DATE : ' + filtered_data['Doc. Date'].iloc[0])
+    st.text('GEN PUR NO : ' + filtered_data['Vou No'].iloc[0])
+    st.text('GEN PUR DATE : ' + filtered_data['Bill Date'].iloc[0])
 
     # Display the remaining columns
     st.table(filtered_data.drop(['Party Name', 'Bill No', 'Doc. Date', 'Vou No', 'Bill Date'], axis=1))
