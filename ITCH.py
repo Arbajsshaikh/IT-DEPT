@@ -40,14 +40,14 @@ if not filtered_data.empty:
         # Add an empty row
         custom_data = pd.concat([custom_data, pd.DataFrame(['', '']).T], ignore_index=True)
     
-        # Create a DataFrame for column names
+        # Create a DataFrame for column names starting from the first column
         column_names = filtered_data.columns.tolist()
         column_names_data = pd.DataFrame({'Column Names': column_names})
     
         # Add column names in the 7th row
         custom_data = pd.concat([custom_data, column_names_data.T], ignore_index=True)
     
-        # Add values from the 8th row
+        # Add values from the 8th row, starting from the first column
         values_data = filtered_data[column_names].apply(lambda x: [''] + x.astype(str).tolist())
         custom_data = pd.concat([custom_data, values_data], ignore_index=True)
     
