@@ -46,21 +46,19 @@ def download_custom_filtered_data_csv(filtered_data, filename):
     # Add an empty row
     custom_data = pd.concat([custom_data, pd.DataFrame(['', '']).T], ignore_index=True)
 
-    # Create a DataFrame for column names and values
+    # Create a DataFrame for column names starting from the first column
     column_names = filtered_data.columns.tolist()
+    column_names_data = pd.DataFrame({'Column Names': column_names})
+
+    # Add column names in the 7th row
+    custom_data = pd.concat([custom_data, column_names_data.T], ignore_index=True)
+
+    # Add values from the 8th row, starting from the first column
     values_data = filtered_data[column_names].apply(lambda x: [str(val) for val in x])
-    data_df = pd.DataFrame(values_data, columns=column_names)
-
-    # Concatenate custom headers, an empty row, column names, and values
-    custom_data = pd.concat([custom_data, data_df], ignore_index=True)
-
-    # Display the custom data in Streamlit
-    st.text(''.join(f"{key}= {value}\n" for key, value in custom_headers.items()))
-    st.text('')  # Empty row
-    st.table(custom_data.drop(['Custom Headers'], axis=1))
+    custom_data = pd.concat([custom_data, values_data], ignore_index=True)
 
     # Save to CSV with custom formatting
-    csv_data = custom_data.to_csv(index=False, sep='\t')  # Use tab as the separator
+    csv_data = custom_data.to_csv(index=False, header=False)
 
     b64 = base64.b64encode(csv_data.encode()).decode()
     href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download Filtered Data as CSV</a>'
